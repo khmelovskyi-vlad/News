@@ -1,0 +1,83 @@
+﻿@model IEnumerable<News.Models.Topic>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<div class="row m-0 p-0">
+    <div class="col-4">
+        <h1 class="text-center">Topics</h1>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-column" id="navbarSupportedContent">
+                @foreach (var topic in Model)
+                {
+                    <ul class="navbar-nav mr-auto flex-column w-100">
+                        <li class="text-center">
+                            <a class="nav-item active font-weight-bold" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@topic.Id">
+                                @Html.DisplayFor(modelItem => topic.Value)
+                            </a>
+                        </li>
+
+                        @foreach (var subTopic in topic.SubTopics)
+                        {
+                            <li class="nav-item" style="background-color: white; border-style: dashed; border-width: 1px;">
+                                <a class="nav-link active"  asp-controller="SubTopics" asp-action="GetArticles"
+                               asp-route-id="@subTopic.Id"asp-route-fieldName="DateOfCreation"
+                               asp-route-pageNumber="1">@Html.DisplayFor(modelItem => subTopic.Value)</a>
+                            </li>
+
+                        }
+                    </ul>
+                }
+            </div>
+        </nav>
+    </div>
+    <div class="col-8">
+        @RenderBody()
+    </div>
+</div>*@
+
+<div class="row m-0 p-0">
+    <div class="col-4">
+        <h1 class="text-center">Topics</h1>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-column" id="navbarSupportedContent">
+                @foreach (var topic in Model)
+                {
+                <ul class="navbar-nav mr-auto flex-column w-100">
+                    <li class="text-center">
+                        <a class="nav-item active font-weight-bold" asp-controller="Topics" asp-action="GetArticles"
+                           asp-route-id="@topic.Id" asp-route-fieldName="DateOfCreation"
+                           asp-route-pageNumber="1">
+                            @Html.DisplayFor(modelItem => topic.Value)
+                        </a>
+                    </li>
+
+                    @foreach (var subTopic in topic.SubTopics)
+                    {
+                        if (ViewBag.SubTopicId == null || subTopic.Id == ViewBag.SubTopicId)
+                        {
+                            <li class="nav-item" style="background-color: white; border-style: dashed; border-width: 1px;">
+                                <a class="nav-link active" asp-controller="Topics" asp-action="GetArticles"
+                                   asp-route-id="@topic.Id" asp-route-subtopicId="@subTopic.Id" asp-route-fieldName="DateOfCreation"
+                                   asp-route-pageNumber="1">@Html.DisplayFor(modelItem => subTopic.Value)</a>
+                            </li>
+                        }
+
+                    }
+                </ul>
+                }
+            </div>
+        </nav>
+    </div>
+    <div class="col-8">
+        @RenderBody()
+    </div>
+</div>

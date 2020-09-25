@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using News.Data;
+using News.Services;
 
 namespace News
 {
@@ -28,6 +29,7 @@ namespace News
         {
             services.AddControllersWithViews();
             services.AddDbContext<NewsContext>(options => options.UseSqlServer(GetSqlConnectionStringBuilder().ConnectionString));
+            services.AddScoped<IArticleService, ArticleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

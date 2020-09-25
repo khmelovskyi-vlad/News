@@ -7,11 +7,20 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <style>
-        * img{
+        * img {
             width: 100%;
         }
-        *{
-            background-color: white;
+
+        * {
+            background-color: #f8ffdc;
+            margin: 0;
+            padding: 0;
+        }
+        @@media only screen and (max-width: 600px) {
+            .arrow-element{
+                width:1em;
+                height:1em;
+            }
         }
     </style>
 </head>
@@ -20,9 +29,9 @@
         <div class="row m-0 p-0">
             <div class="col-4 m-0 p-0"></div>
             <div class="col-4 m-0 p-0 row justify-content-center flex-grow-1">
-            <a href="#" class="column">
-                <img class="img-fluid" src="~/img/log2.jpg" alt="logo" style="height: auto; width: 300px;" />
-            </a>
+                <a href="#" class="column">
+                    <img class="img-fluid" src="~/img/log2.jpg" alt="logo" style="height: auto; width: 300px;" />
+                </a>
             </div>
 
             <div class="col-2 m-0 p-0"></div>
@@ -34,11 +43,11 @@
                         <input type="text" name="search" placeholder="search" size="5" />
                     </form>
                 </div>
-                
+
                 @*<button class="col-6 btn" type="button">Search</button>*@
             </div>
         </div>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow m-0 p-0 mb-3">
             <div class="container">
 
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">News</a>
@@ -52,15 +61,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index">Topics</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="con-12">
+        <main role="main" class="pb-3 m-0">
             @RenderBody()
         </main>
     </div>

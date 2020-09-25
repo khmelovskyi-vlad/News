@@ -1,0 +1,78 @@
+﻿@model IEnumerable<News.Models.SubTopic>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row m-0 p-0">
+    <div class="col-4">
+        <h1 class="text-center">Sub Topics</h1>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-column" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto flex-column w-100">
+                    @foreach (var subTopic in Model)
+                    {
+                        <li class="nav-item" style="background-color: white; border-style: dashed; border-width: 1px;">
+                            <a class="nav-link active" asp-controller="SubTopics" asp-action="GetArticles"
+                               asp-route-id="@subTopic.Id" asp-route-fieldName="DateOfCreation"
+                               asp-route-pageNumber="1">@Html.DisplayFor(modelItem => subTopic.Value)</a>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="col-8">
+        <div class="row flex-column">
+            @RenderBody()
+
+            <div class="column">
+                @if (ViewBag.PageCount > 1)
+                {
+                    <div class="row justify-content-between m-2">
+                        <div class="column">
+                            <a href="#">
+                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-left-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+                                </svg>
+                            </a>
+
+                        </div>
+                        <div class="column">
+                            @for (int j = 1; j < ViewBag.PageCount + 1; j++)
+                            {
+                                if (j >= 5)
+                                {
+                                    <a href="#">...</a>
+                                    <a asp-controller="SubTopics" asp-action="GetArticles"
+                                       asp-route-id="@ViewBag.SubTopicId"
+                                       asp-route-fieldName="@ViewBag.FieldName"
+                                       asp-route-pageNumber="@j" class="mx-1">@ViewBag.PageCount</a>
+                                    return;
+                                }
+                                <a asp-controller="SubTopics" asp-action="GetArticles"
+                                   asp-route-id="@ViewBag.SubTopicId"
+                                   asp-route-fieldName="@ViewBag.FieldName"
+                                   asp-route-pageNumber="@j" class="mx-1">@j</a>
+                            }
+                        </div>
+                        <div class="column">
+                            <a href="#">
+                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-right-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5A.5.5 0 0 0 4 8z" />
+                                </svg>
+                            </a>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,7 +10,9 @@ namespace News.Models
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        [Display(Name = "Date of creation")]
         public DateTime DateOfCreation { get; set; }
+        [Display(Name = "Date of publication")]
         public DateTime DateOfPublication { get; set; }
         public bool IsPublish { get; set; }
         public Guid PhotoName { get; set; }

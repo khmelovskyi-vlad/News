@@ -1,0 +1,83 @@
+﻿@model IEnumerable<News.Models.SubTopic>
+
+@{
+    ViewData["Title"] = "SubTopics";
+    Layout = "~/Views/Shared/_SubTopicsLayout.cshtml";
+}
+
+
+    <div class="column">
+        <div class="row m-0">
+            <div class="dropdown">
+                <button class="btn btn-warning dropdown-toggle"
+                        type="button" id="dropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort by
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownButton">
+                    <a class="dropdown-item" asp-controller="SubTopics" asp-action="GetArticles"
+                       asp-route-id="@ViewBag.SubTopicId"
+                       asp-route-fieldName="DateOfCreation">@Html.DisplayNameFor(model => model.Articles.First().DateOfCreation)</a>
+                    <a class="dropdown-item" asp-controller="SubTopics" asp-action="GetArticles"
+                       asp-route-id="@ViewBag.SubTopicId"
+                       asp-route-fieldName="DateOfPublication">@Html.DisplayNameFor(model => model.Articles.First().DateOfPublication)</a>
+                    <a class="dropdown-item" asp-controller="SubTopics" asp-action="GetArticles"
+                       asp-route-id="@ViewBag.SubTopicId"
+                       asp-route-fieldName="Title">@Html.DisplayNameFor(model => model.Articles.First().Title)</a>
+                    <a class="dropdown-item" asp-controller="SubTopics" asp-action="GetArticles"
+                       asp-route-id="@ViewBag.SubTopicId"
+                       asp-route-fieldName="SubTopic.Value">@Html.DisplayNameFor(model => model.Value)</a>
+                    <a class="dropdown-item" asp-controller="SubTopics" asp-action="GetArticles"
+                       asp-route-id="@ViewBag.SubTopicId"
+                       asp-route-fieldName="SubTopic.Topic.Value">@Html.DisplayNameFor(model => model.Topic.Value)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        @{ var i = 0;
+            @foreach (var article in (IEnumerable<Article>)ViewData["Articles"])
+            {
+                if (i == 100)
+                {
+                    return;
+                }
+                <a class="list-group-item" href="#">@Html.DisplayFor(model => article.Title)</a>
+                i++;
+            }
+        }
+    </div>
+
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Topic)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Topic.Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
