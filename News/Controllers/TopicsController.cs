@@ -23,15 +23,17 @@ namespace News.Controllers
         }
 
         // GET: Topics
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string fieldName, int pageNumber, bool isDescending = true)
         {
-            var topics = await _context
-                .Topica
-                .Include(topic => topic.SubTopics)
-                .ThenInclude(subTopic => subTopic.Articles)
-                .ToListAsync();
-            ViewData["Articles"] = topics.SelectMany(topic => topic.SubTopics).SelectMany(subTopic => subTopic.Articles);
-            return View(topics);
+            //var topics = await _context
+            //    .Topica
+            //    .Include(topic => topic.SubTopics)
+            //    .ThenInclude(subTopic => subTopic.Articles)
+            //    .ToListAsync();
+            //ViewData["Articles"] = topics.SelectMany(topic => topic.SubTopics).SelectMany(subTopic => subTopic.Articles);
+            //return View(topics);
+            var topicContentModel = await CreateTopicContentModel(null, null, fieldName, pageNumber, isDescending);
+            return View(topicContentModel);
         }
 
         //public async Task<IActionResult> GetArticles(Guid? id)
@@ -45,29 +47,53 @@ namespace News.Controllers
         //    ViewData["Articles"] = topics.SelectMany(topic => topic.SubTopics).SelectMany(subTopic => subTopic.Articles);
         //    return View("Index", topics);
         //}
-        private const int ElementsOnPage = 20;
-        public async Task<IActionResult> GetArticles(Guid? id, Guid? subtopicId, string fieldName, int pageNumber)
+        private const int MaxArticlesOnPage = 20;
+        private async Task<TopicContentModel> CreateTopicContentModel(Guid? id, Guid? subtopicId, string fieldName, int pageNumber, bool isDescending)
         {
+            var topicContentModel = new TopicContentModel();
             var topics = await _context
                 .Topica
-                .Where(topicc => topicc.Id == id)
+                .Where(topicc => id == null ? true : topicc.Id == id)
                 .Include(topicc => topicc.SubTopics)
                 .ThenInclude(subTopic => subTopic.Articles)
                 .ToListAsync();
-            ViewData["Articles"] = await _articleService.SortArticles(
+            topicContentModel.Topics = topics;
+            topicContentModel.Articles =
+                await _articleService.SortArticles(
                 _context.Articles
-                .Where(article => article.SubTopic.Topic.Id == id && subtopicId == null ? true : article.SubTopic.Id == subtopicId),
-                new Sort() { FieldName = fieldName, IsDescending = false, PageNumber = pageNumber })
+                .Where(article => id == null ? true : article.SubTopic.Topic.Id == id 
+                && subtopicId == null ? true : article.SubTopic.Id == subtopicId),
+                new Sort() { FieldName = fieldName, IsDescending = isDescending, PageNumber = pageNumber },
+                MaxArticlesOnPage)
                 .ToListAsync();
-            ViewBag.TopicId = id;
-            ViewBag.SubTopicId = subtopicId;
-            ViewBag.FieldName = fieldName;
-            ViewBag.PageNumber = pageNumber;
-            ViewBag.PageCount = topics
+            topicContentModel.FieldName = fieldName;
+            topicContentModel.PageNumber = pageNumber;
+            topicContentModel.PageCount = (topicContentModel.Topics
                 .SelectMany(topic => topic.SubTopics)
                 .Where(subTopic => subtopicId == null ? true : subTopic.Id == subtopicId)
-                .SelectMany(subTopic => subTopic.Articles).Count() / ElementsOnPage + 1;
-            return View("Index", topics);
+                .SelectMany(subTopic => subTopic.Articles).Count() - 1) / MaxArticlesOnPage + 1;
+            topicContentModel.TopicId = id;
+            topicContentModel.SubTopicId = subtopicId;
+            topicContentModel.IsDescending = isDescending;
+            return topicContentModel;
+        }
+        public async Task<IActionResult> GetArticles(Guid? id, Guid? subtopicId, string fieldName, int pageNumber, bool isDescending = true)
+        {
+            var topicContentModel = await CreateTopicContentModel(id, subtopicId, fieldName, pageNumber, isDescending);
+            //ViewData["Articles"] = await _articleService.SortArticles(
+            //    _context.Articles
+            //    .Where(article => article.SubTopic.Topic.Id == id && subtopicId == null ? true : article.SubTopic.Id == subtopicId),
+            //    new Sort() { FieldName = fieldName, IsDescending = false, PageNumber = pageNumber })
+            //    .ToListAsync();
+            //ViewBag.TopicId = id;
+            //ViewBag.SubTopicId = subtopicId; 
+            //ViewBag.FieldName = fieldName;
+            //ViewBag.PageNumber = pageNumber;
+            //ViewBag.PageCount = topics
+            //    .SelectMany(topic => topic.SubTopics)
+            //    .Where(subTopic => subtopicId == null ? true : subTopic.Id == subtopicId)
+            //    .SelectMany(subTopic => subTopic.Articles).Count() / ElementsOnPage + 1;
+            return View("Index", topicContentModel);
         }
         //GET: Topics/Details/5
         public async Task<IActionResult> Details(Guid? id)

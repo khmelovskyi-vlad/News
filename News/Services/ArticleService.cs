@@ -11,10 +11,9 @@ namespace News.Services
 {
     public class ArticleService : IArticleService
     {
-        private const int ItemsOnOnePage = 20;
-        public IQueryable<Article> SortArticles(IQueryable<Article> articles, Sort sort)
+        public IQueryable<Article> SortArticles(IQueryable<Article> articles, Sort sort, int maxArticlesOnPage)
         {
-            return OrderBy(articles, sort).Skip((sort.PageNumber-1) * ItemsOnOnePage).Take(ItemsOnOnePage);
+            return OrderBy(articles, sort).Skip((sort.PageNumber - 1) * maxArticlesOnPage).Take(maxArticlesOnPage);
         }
         private IQueryable<Article> OrderBy(IQueryable<Article> articles, Sort sort)
         {

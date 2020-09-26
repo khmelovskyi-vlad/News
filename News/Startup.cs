@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,9 @@ namespace News
             services.AddControllersWithViews();
             services.AddDbContext<NewsContext>(options => options.UseSqlServer(GetSqlConnectionStringBuilder().ConnectionString));
             services.AddScoped<IArticleService, ArticleService>();
+            //services.AddMvc()
+            //    .AddRazorOptions(option =>
+            //    option.ViewLocationFormats.Add("/{0}.cshtml")).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

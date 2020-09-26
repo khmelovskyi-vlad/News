@@ -9,6 +9,6 @@ namespace News.Services
 {
     public interface IArticleService
     {
-        IQueryable<Article> SortArticles(IQueryable<Article> articles, Sort sort);
+        IQueryable<Article> SortArticles(IQueryable<Article> articles, Sort sort, int maxArticlesOnPage);
     }
 }

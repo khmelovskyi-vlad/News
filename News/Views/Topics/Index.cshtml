@@ -1,146 +1,198 @@
-﻿@model IEnumerable<News.Models.Topic>
+﻿@model News.Models.TopicContentModel
 
 @{
     ViewData["Title"] = "Topics";
-    Layout = "~/Views/Shared/_TopicsLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-<div class="list-group">
-    @*@{ var i = 0;
-        @foreach (var article in (IEnumerable<Article>)ViewData["Articles"])
-        {
-            if (i == 100)
-            {
-                return;
+@*<div class="list-group">
+    @{ var i = 0;
+                @foreach (var article in (IEnumerable<Article>)ViewData["Articles"])
+                {
+                    if (i == 100)
+                    {
+                        return;
+                    }
+                    <a class="list-group-item" href="#">@Html.DisplayFor(model => article.Title)</a>
+                    i++;
+                }
             }
-            <a class="list-group-item" href="#">@Html.DisplayFor(model => article.Title)</a>
-            i++;
-        }
-    }
-</div>*@
+        </div>*@
 
 
 
-
-<div class="row flex-column">
-
-    <div class="column">
-        <div class="row m-0">
-            <div class="dropdown">
-                <button class="btn btn-warning dropdown-toggle"
-                        type="button" id="dropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort by
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownButton">
-                    <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
-                       asp-route-id="@ViewBag.SubTopicId"
-                       asp-route-fieldName="DateOfCreation"
-                       asp-route-pageNumber="ViewBag.PageNumber">@Html.DisplayNameFor(model => model.SubTopics.First().Articles.First().DateOfCreation)</a>
-                    <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
-                       asp-route-id="@ViewBag.SubTopicId"
-                       asp-route-fieldName="DateOfPublication"
-                       asp-route-pageNumber="ViewBag.PageNumber">@Html.DisplayNameFor(model => model.SubTopics.First().Articles.First().DateOfPublication)</a>
-                    <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
-                       asp-route-id="@ViewBag.SubTopicId"
-                       asp-route-fieldName="Title"
-                       asp-route-pageNumber="ViewBag.PageNumber">@Html.DisplayNameFor(model => model.SubTopics.First().Articles.First().Title)</a>
-                    <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
-                       asp-route-id="@ViewBag.SubTopicId"
-                       asp-route-fieldName="SubTopic.Value"
-                       asp-route-pageNumber="ViewBag.PageNumber">@Html.DisplayNameFor(model => model.SubTopics.First().Value)</a>
-                    <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
-                       asp-route-id="@ViewBag.SubTopicId"
-                       asp-route-fieldName="SubTopic.Topic.Value"
-                       asp-route-pageNumber="ViewBag.PageNumber">@Html.DisplayNameFor(model => model.Value)</a>
+<div class="row m-0 p-0">
+    @await Component.InvokeAsync("LeftTopicNavbar", new { topics = Model.Topics, subTopicId = Model.SubTopicId})
+    <div class="col-8">
+        <div class="row flex-column">
+            <div class="column">
+                <div class="row m-0 align-items-center">
+                    <div class="dropdown mr-5">
+                        <button class="btn btn-warning dropdown-toggle"
+                                type="button" id="dropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort by
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownButton">
+                            <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="DateOfCreation"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="@Model.IsDescending">Date of creation</a>
+                            <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="DateOfPublication"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="@Model.IsDescending">Date of publication</a>
+                            <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="Title"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="@Model.IsDescending">Title</a>
+                            <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="SubTopic.Value"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="@Model.IsDescending">Subtopics</a>
+                            <a class="dropdown-item" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="SubTopic.Topic.Value"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="@Model.IsDescending">Topic</a>
+                        </div>
+                    </div>
+                    <div>
+                        @*Add reverse add backlight*@
+                        <a class="btn mx-1" asp-controller="Topics" asp-action="GetArticles"
+                           asp-route-id="@Model.TopicId"
+                           asp-route-subtopicId="@Model.SubTopicId"
+                           asp-route-fieldName="@Model.FieldName"
+                           asp-route-pageNumber="@Model.PageNumber"
+                           asp-route-isDescending="true">
+                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-up-circle-fill arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btn mx-1" asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="@Model.FieldName"
+                               asp-route-pageNumber="@Model.PageNumber"
+                               asp-route-isDescending="false">
+                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-down-circle-fill arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
+            </div>
+            <div class="list-group">
+                @foreach (var article in Model.Articles)
+                {
+                    <a class="list-group-item" href="#">@Html.DisplayFor(model => article.Title)</a>
+                }
+            </div>
+
+            <div class="column">
+                @if (Model.PageCount > 1)
+                {
+                    var previousPage = Model.PageNumber == 1 ? Model.PageNumber : Model.PageNumber - 1;
+                    var nextPage = Model.PageNumber == Model.PageCount ? Model.PageNumber : Model.PageNumber + 1;
+                    <div class="row justify-content-between m-2">
+                        <div class="column">
+                            @*//add disabled*@
+                            <a asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="@Model.FieldName"
+                               asp-route-pageNumber="@previousPage"
+                               asp-route-isDescending="@Model.IsDescending">
+                                @*//add normal parameter*@
+                            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-left-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+                            </svg>
+                            </a>
+
+                        </div>
+                        <div class="column">
+                            @for (int j = 1; j <= Model.PageCount; j++)
+                            {
+                                if (j >= 5)
+                                {
+                                    <a href="#">...</a>
+                                    <a class="mx-1" asp-controller="Topics" asp-action="GetArticles"
+                                       asp-route-id="@Model.TopicId"
+                                       asp-route-subtopicId="@Model.SubTopicId"
+                                       asp-route-fieldName="@Model.FieldName"
+                                       asp-route-pageNumber="@Model.PageCount"
+                                       asp-route-isDescending="@Model.IsDescending">@Model.PageCount</a>
+                                    break;
+                                }
+                                <a class="mx-1" asp-controller="Topics" asp-action="GetArticles"
+                                   asp-route-id="@Model.TopicId"
+                                   asp-route-subtopicId="@Model.SubTopicId"
+                                   asp-route-fieldName="@Model.FieldName"
+                                   asp-route-pageNumber="@j"
+                                   asp-route-isDescending="@Model.IsDescending">@j</a>
+                            }
+                        </div>
+                        <div class="column">
+                            <a asp-controller="Topics" asp-action="GetArticles"
+                               asp-route-id="@Model.TopicId"
+                               asp-route-subtopicId="@Model.SubTopicId"
+                               asp-route-fieldName="@Model.FieldName"
+                               asp-route-pageNumber="@nextPage"
+                               asp-route-isDescending="@Model.IsDescending">
+                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-right-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5A.5.5 0 0 0 4 8z" />
+                                </svg>
+                            </a>
+                        </div>
+
+                    </div>
+                }
             </div>
         </div>
     </div>
-    <div class="list-group">
-        @foreach (var article in (IEnumerable<Article>)ViewData["Articles"])
-        {
-            <a class="list-group-item" href="#">@Html.DisplayFor(model => article.Title)</a>
-        }
-    </div>
-
-    <div class="column">
-        @if (ViewBag.PageCount > 1)
-        {
-            <div class="row justify-content-between m-2">
-                <div class="column">
-                    <a href="#">
-                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-left-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
-                        </svg>
-                    </a>
-
-                </div>
-                <div class="column">
-                    @for (int j = 1; j < ViewBag.PageCount + 1; j++)
-                    {
-                        if (j >= 5)
-                        {
-                            <a href="#">...</a>
-                            <a asp-controller="Topics" asp-action="GetArticles"
-                               asp-route-id="@ViewBag.TopicId"
-                               asp-route-subtopicId="@ViewBag.SubTopicId"
-                               asp-route-fieldName="@ViewBag.FieldName"
-                               asp-route-pageNumber="@j" class="mx-1">@ViewBag.PageCount</a>
-                            break;
-                        }
-                        <a asp-controller="Topics" asp-action="GetArticles"
-                           asp-route-id="@ViewBag.TopicId"
-                           asp-route-subtopicId="@ViewBag.SubTopicId"
-                           asp-route-fieldName="@ViewBag.FieldName"
-                           asp-route-pageNumber="@j" class="mx-1">@j</a>
-                    }
-                </div>
-                <div class="column">
-                    <a href="#">
-                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-right-square arrow-element" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5A.5.5 0 0 0 4 8z" />
-                        </svg>
-                    </a>
-                </div>
-
-            </div>
-        }
-    </div>
 </div>
 
-
-
 @*<p>
-        <a asp-action="Create">Create New</a>
-    </p>
-<table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Value)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                @foreach (var subTopic in item.SubTopics)
+            <a asp-action="Create">Create New</a>
+        </p>
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Value)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => subTopic.Value)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
+                    @foreach (var subTopic in item.SubTopics)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => subTopic.Value)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>*@
+            </tbody>
+        </table>*@

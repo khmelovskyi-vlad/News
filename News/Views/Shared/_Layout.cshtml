@@ -61,7 +61,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index">Topics</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index"
+                               asp-route-fieldName="DateOfCreation" asp-route-pageNumber="1"
+                               asp-route-isDescending="@Model.IsDescending">Topics</a>
                         </li>
                     </ul>
                 </div>

@@ -44,7 +44,7 @@ namespace News.Controllers
             //var art = await _articleService.SortArticles(_context.Articles.Where(article => article.SubTopic.Id == id), 
             //    new Sort() { FieldName = fieldName, IsDescending= false, PageNumber=pageNumber}).ToListAsync();
             ViewData["Articles"] = await _articleService.SortArticles(_context.Articles.Where(article => article.SubTopic.Id == id),
-                new Sort() { FieldName = fieldName, IsDescending = false, PageNumber = pageNumber }).ToListAsync();
+                new Sort() { FieldName = fieldName, IsDescending = false, PageNumber = pageNumber }, 5).ToListAsync();
             ViewBag.SubTopicId = id;
             ViewBag.FieldName = fieldName;
             ViewBag.PageNumber = pageNumber;
