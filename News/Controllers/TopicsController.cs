@@ -23,7 +23,7 @@ namespace News.Controllers
         }
 
         // GET: Topics
-        public async Task<IActionResult> Index(string fieldName, int pageNumber, bool isDescending = true)
+        public async Task<IActionResult> Index(string fieldName, int pageNumber, bool isDescending = false)
         {
             //var topics = await _context
             //    .Topica
@@ -61,7 +61,8 @@ namespace News.Controllers
             topicContentModel.Articles =
                 await _articleService.SortArticles(
                 _context.Articles
-                .Where(article => id == null ? true : article.SubTopic.Topic.Id == id 
+                .Where(article => article.IsPublish 
+                && id == null ? true : article.SubTopic.Topic.Id == id 
                 && subtopicId == null ? true : article.SubTopic.Id == subtopicId),
                 new Sort() { FieldName = fieldName, IsDescending = isDescending, PageNumber = pageNumber },
                 MaxArticlesOnPage)
@@ -71,13 +72,14 @@ namespace News.Controllers
             topicContentModel.PageCount = (topicContentModel.Topics
                 .SelectMany(topic => topic.SubTopics)
                 .Where(subTopic => subtopicId == null ? true : subTopic.Id == subtopicId)
-                .SelectMany(subTopic => subTopic.Articles).Count() - 1) / MaxArticlesOnPage + 1;
+                .SelectMany(subTopic => subTopic.Articles)
+                .Where(article => article.IsPublish).Count() - 1) / MaxArticlesOnPage + 1;
             topicContentModel.TopicId = id;
             topicContentModel.SubTopicId = subtopicId;
             topicContentModel.IsDescending = isDescending;
             return topicContentModel;
         }
-        public async Task<IActionResult> GetArticles(Guid? id, Guid? subtopicId, string fieldName, int pageNumber, bool isDescending = true)
+        public async Task<IActionResult> GetArticles(Guid? id, Guid? subtopicId, string fieldName, int pageNumber, bool isDescending = false)
         {
             var topicContentModel = await CreateTopicContentModel(id, subtopicId, fieldName, pageNumber, isDescending);
             //ViewData["Articles"] = await _articleService.SortArticles(

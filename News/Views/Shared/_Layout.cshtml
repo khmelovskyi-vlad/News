@@ -16,7 +16,7 @@
             margin: 0;
             padding: 0;
         }
-        @@media only screen and (max-width: 600px) {
+        @@media only screen and (max-width: 1000px) {
             .arrow-element{
                 width:1em;
                 height:1em;
@@ -63,7 +63,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index"
                                asp-route-fieldName="DateOfCreation" asp-route-pageNumber="1"
-                               asp-route-isDescending="@Model.IsDescending">Topics</a>
+                               asp-route-isDescending="false">Topics</a>
                         </li>
                     </ul>
                 </div>

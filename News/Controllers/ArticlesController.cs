@@ -18,29 +18,15 @@ namespace News.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> GetArticlesForTopic(Guid? id)
-        {
-            return View("GetArticles", await _context
-                .Topica
-                .Where(topic => topic.Id == id)
-                .Include(topic => topic.SubTopics)
-                .ThenInclude(subTopic => subTopic.Articles)
-                .ToListAsync());
-        }
-        public async Task<IActionResult> GetArticlesForSubTopic(Guid? id)
-        {
-            return View("GetArticles", await _context
-                .SubTopics
-                .Where(subTopic => subTopic.Id == id)
-                .Include(subTopic => subTopic.Topic)
-                .Include(subTopic => subTopic.Articles)
-                .ToListAsync());
-        }
         // GET: Articles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? id)
         {
-            var newsContext = _context.Articles.Include(a => a.AddedBy).Include(a => a.SubTopic);
-            return View(await newsContext.ToListAsync());
+            var article = await _context
+                .Articles
+                .Where(art => art.Id == id)
+                .Include(art => art.Comments)
+                .FirstOrDefaultAsync();
+            return View(article);
         }
 
         // GET: Articles/Details/5

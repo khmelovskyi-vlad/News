@@ -1,10 +1,59 @@
-﻿@model IEnumerable<News.Models.Article>
+﻿@model News.Models.Article
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+
+<section class="row w-100 justify-content-center">
+    <div class="row w-75">
+        <div class="col-4"></div>
+        <div class="col-8">
+            <div class="row flex-column">
+                <h1 class="text-center">@Model.Title</h1>
+                <div class="column">
+                    <p class="text-justify text-wrap text-break font-italic" style="font-size: 13px">Date of publication: @Model.DateOfPublication</p>
+                </div>
+                <div class="column">
+                    @{ var photoPath = $"/img/{Model.PhotoName}.jpg";}
+                    <img src="@photoPath" alt="Article image" />
+                </div>
+                <div class="column my-5">
+                    <p class="text-justify text-wrap text-break">@Model.Content</p>
+                </div>
+                <div class="column">
+                    <div class="row m-0 flex-column">
+                        @{var commentsCount = Model.Comments == null ? 0 : @Model.Comments.Count;}
+                        <h4 class="text-center">Have @commentsCount comments</h4>
+                        <div class="column">
+                            <form action="/" method="get">
+                                <textarea name="comment" class="w-100" style="height: 200px" maxlength="500"></textarea>
+                                <input type="submit">
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+@*<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -74,4 +123,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@
