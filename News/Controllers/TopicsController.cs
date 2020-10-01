@@ -52,7 +52,7 @@ namespace News.Controllers
         {
             var topicContentModel = new TopicContentModel();
             var topics = await _context
-                .Topica
+                .Topics
                 .Where(topicc => id == null ? true : topicc.Id == id)
                 .Include(topicc => topicc.SubTopics)
                 .ThenInclude(subTopic => subTopic.Articles)
@@ -105,7 +105,7 @@ namespace News.Controllers
                 return NotFound();
             }
 
-            var topic = await _context.Topica
+            var topic = await _context.Topics
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null)
             {
@@ -146,7 +146,7 @@ namespace News.Controllers
                 return NotFound();
             }
 
-            var topic = await _context.Topica.FindAsync(id);
+            var topic = await _context.Topics.FindAsync(id);
             if (topic == null)
             {
                 return NotFound();
@@ -197,7 +197,7 @@ namespace News.Controllers
                 return NotFound();
             }
 
-            var topic = await _context.Topica
+            var topic = await _context.Topics
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null)
             {
@@ -212,15 +212,15 @@ namespace News.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var topic = await _context.Topica.FindAsync(id);
-            _context.Topica.Remove(topic);
+            var topic = await _context.Topics.FindAsync(id);
+            _context.Topics.Remove(topic);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TopicExists(Guid id)
         {
-            return _context.Topica.Any(e => e.Id == id);
+            return _context.Topics.Any(e => e.Id == id);
         }
     }
 }

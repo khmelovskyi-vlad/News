@@ -17,7 +17,7 @@ namespace News.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<SubTopic> SubTopics { get; set; }
-        public DbSet<Topic> Topica { get; set; }
+        public DbSet<Topic> Topics { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ArticleAuthor> ArticleAuthors { get; set; }

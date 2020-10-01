@@ -1,0 +1,21 @@
+﻿@model News.Models.Article
+
+<h1 class="text-center">Editing tools</h1>
+<div class="row flex-column">
+    <div class="collumn">
+        <h3 class="text-center">Change article</h3>
+        <form asp-action="ChangeArticle" asp-controller="Articles" asp-route-id="@Model.Id" method="post">
+            <label asp-for="Title"></label><br />
+            <input asp-for="Title" /><br />
+            <label asp-for="DateOfCreation"></label><br />
+            <input asp-for="DateOfCreation" /><br />
+            <label asp-for="DateOfPublication"></label><br />
+            <input asp-for="DateOfPublication" /><br />
+            <label asp-for="IsPublish"></label><br />
+            <input asp-for="IsPublish" /><br />
+            <label asp-for="Content"></label><br />
+            <textarea asp-for="Content" style="height: 200px"></textarea><br />
+            <input type="submit" value="Save" />
+        </form>
+    </div>
+</div>

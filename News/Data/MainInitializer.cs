@@ -130,7 +130,7 @@ namespace News.Data
                                 DateOfCreation = CreateRandomData(1900, 2020, random),
                                 DateOfPublication = DateTime.Now,
                                 IsPublish = CreateRandomBool(random, 50),
-                                PhotoName = Guid.NewGuid(),
+                                ImageId = Guid.NewGuid(),
                                 Content = CreateRandomString(1, 50000, "abcdefghijklmnopqrstuvwxyz", random),
                                 AdminId = admin.Id,
                                 SubTopicId = subTopic.Id

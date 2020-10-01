@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using News.Data;
 using News.Services;
 
@@ -31,9 +33,37 @@ namespace News
             services.AddControllersWithViews();
             services.AddDbContext<NewsContext>(options => options.UseSqlServer(GetSqlConnectionStringBuilder().ConnectionString));
             services.AddScoped<IArticleService, ArticleService>();
-            //services.AddMvc()
-            //    .AddRazorOptions(option =>
-            //    option.ViewLocationFormats.Add("/{0}.cshtml")).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.SignInScheme = "Cookies";
+
+                options.Authority = "https://localhost:5001";
+                options.RequireHttpsMetadata = false;
+
+                options.ClientId = "mvc";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code id_token";
+
+                options.SaveTokens = true;
+                //options.GetClaimsFromUserInfoEndpoint = true;
+                options.Scope.Add("api1");
+                //options.Scope.Add("offline_access");
+                //options.ClaimActions.MapJsonKey("website", "website");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +84,7 @@ namespace News
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -80,7 +80,7 @@ namespace News.Controllers
         // GET: SubTopics/Create
         public IActionResult Create()
         {
-            ViewData["TopicId"] = new SelectList(_context.Topica, "Id", "Id");
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id");
             return View();
         }
 
@@ -98,7 +98,7 @@ namespace News.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TopicId"] = new SelectList(_context.Topica, "Id", "Id", subTopic.TopicId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", subTopic.TopicId);
             return View(subTopic);
         }
 
@@ -115,7 +115,7 @@ namespace News.Controllers
             {
                 return NotFound();
             }
-            ViewData["TopicId"] = new SelectList(_context.Topica, "Id", "Id", subTopic.TopicId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", subTopic.TopicId);
             return View(subTopic);
         }
 
@@ -151,7 +151,7 @@ namespace News.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TopicId"] = new SelectList(_context.Topica, "Id", "Id", subTopic.TopicId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", subTopic.TopicId);
             return View(subTopic);
         }
 

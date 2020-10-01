@@ -13,13 +13,13 @@ namespace News.Models
         [Display(Name = "Date of creation")]
         public DateTime DateOfCreation { get; set; }
         [Display(Name = "Date of publication")]
-        public DateTime DateOfPublication { get; set; }
+        public DateTime? DateOfPublication { get; set; }
         public bool IsPublish { get; set; }
-        public Guid PhotoName { get; set; }
+        public Guid ImageId { get; set; }
         public string Content { get; set; }
 
 
-        public Admin AddedBy { get; set; }
+        public Admin Admin { get; set; }
         public Guid AdminId { get; set; }
         public SubTopic SubTopic { get; set; }
         public Guid SubTopicId { get; set; }
