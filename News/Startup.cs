@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,22 +43,36 @@ namespace News
                 options.DefaultChallengeScheme = "oidc";
             })
             .AddCookie("Cookies")
+            //.AddOpenIdConnect("oidc", options =>
+            //{
+            //    options.Authority = "https://localhost:5001";
+
+            //    options.ClientId = "mvc";
+            //    options.ClientSecret = "secret";
+            //    options.ResponseType = "code";
+
+            //    options.Scope.Add("api1");
+
+            //    options.SaveTokens = true;
+            //});
             .AddOpenIdConnect("oidc", options =>
             {
                 options.SignInScheme = "Cookies";
 
+                //options.Authority = "https://localhost:5000";e
                 options.Authority = "https://localhost:5001";
-                options.RequireHttpsMetadata = false;
+                //options.Authority = "https://localhost:44383";
+                //options.RequireHttpsMetadata = false;
 
                 options.ClientId = "mvc";
                 options.ClientSecret = "secret";
                 options.ResponseType = "code id_token";
 
                 options.SaveTokens = true;
-                //options.GetClaimsFromUserInfoEndpoint = true;
-                options.Scope.Add("api1");
-                //options.Scope.Add("offline_access");
-                //options.ClaimActions.MapJsonKey("website", "website");
+                options.GetClaimsFromUserInfoEndpoint = true; // give claims from user info endpoint claims
+                options.Scope.Add("api1"); // give api1
+                options.Scope.Add("offline_access"); //give refresh token
+                options.ClaimActions.MapJsonKey("website", "website"); //give website claim
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = "name",
